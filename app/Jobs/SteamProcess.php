@@ -78,12 +78,9 @@ class SteamProcess implements ShouldQueue
             
             $apps = SteamApp::all()->take(10);
 
-            foreach ($apps as $key => $app) {
-                
+            foreach ($apps as $key => $app) {                
                 $response = Http::get('http://store.steampowered.com/api/appdetails?appids=' . $app->appid . '&cc=BRA');
-
                 $appDetails = $response[$app->appid]['data'];
-
                 SteamAppDetails::create($appDetails);
             }
             
