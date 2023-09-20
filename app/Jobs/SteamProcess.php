@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\SteamApp;
 use App\Models\SteamAppDetails;
+use App\Models\Watcher;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Bus\Queueable;
@@ -30,7 +31,7 @@ class SteamProcess implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->fetchSteamApps();
+        //$this->fetchSteamApps();
         $this->fetchSteamAppsDetails();
     }
     
@@ -41,6 +42,7 @@ class SteamProcess implements ShouldQueue
             $key = "7C1DB6DDF7B335B9A8DF8348F3CDCE57";
             $haveMoreResults = false;
 
+            // isso é problema pro frontend
             SteamApp::truncate();
             
             do {
@@ -76,11 +78,14 @@ class SteamProcess implements ShouldQueue
         
         try {
             
-            $apps = SteamApp::all()->take(10);
+            // isso é problema pro frontend
+            SteamAppDetails::truncate();
+
+            $apps = Watcher::where('detail', true)->get();
 
             foreach ($apps as $key => $app) {                
-                $response = Http::get('http://store.steampowered.com/api/appdetails?appids=' . $app->appid . '&cc=BRA');
-                $appDetails = $response[$app->appid]['data'];
+                $response = Http::get('http://store.steampowered.com/api/appdetails?appids=' . $app->steam_appid . '&cc=BRA');
+                $appDetails = $response[$app->steam_appid]['data'];
                 SteamAppDetails::create($appDetails);
             }
             

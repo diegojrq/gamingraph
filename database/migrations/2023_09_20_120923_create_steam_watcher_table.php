@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('steam_appid');
             $table->boolean('detail');
             $table->boolean('price');
-            $table->boolean('plyer_count');
+            $table->boolean('player_count');
             $table->timestamps();
         });
     }
