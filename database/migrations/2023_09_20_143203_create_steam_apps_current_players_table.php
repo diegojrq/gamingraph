@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('steam_watcher', function (Blueprint $table) {
+        Schema::create('steam_apps_current_players', function (Blueprint $table) {
             $table->id('steam_appid');
-            $table->boolean('detail');
-            $table->boolean('price');
-            $table->boolean('current_players');
+            $table->integer('player_count');
+            $table->integer('result');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('steam_watcher');
+        Schema::dropIfExists('steam_apps_current_players');
     }
 };

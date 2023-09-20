@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\SteamApp;
 use App\Models\SteamAppDetails;
+use App\Models\SteamAppCurrentPlayers;
 use App\Models\Watcher;
 
 use Illuminate\Support\Facades\Http;
@@ -31,6 +32,7 @@ class SteamProcess implements ShouldQueue
      */
     public function handle(): void
     {
+        $this->fetchSteamCurrentPlayers();
         //$this->fetchSteamApps();
         $this->fetchSteamAppsDetails();
     }
@@ -87,6 +89,26 @@ class SteamProcess implements ShouldQueue
                 $response = Http::get('http://store.steampowered.com/api/appdetails?appids=' . $app->steam_appid . '&cc=BRA');
                 $appDetails = $response[$app->steam_appid]['data'];
                 SteamAppDetails::create($appDetails);
+            }
+            
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    function fetchSteamCurrentPlayers() {
+        
+        try {
+            
+            $apps = Watcher::where('current_players', true)->get();
+
+            foreach ($apps as $key => $app) {                
+                $response = Http::get('https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/', [
+                    'key'           => $key,
+                    'appid'         => $app->steam_appid,
+                ]);
+                $currentPlayers = $response['response'];
+                SteamAppCurrentPlayers::create($currentPlayers);
             }
             
         } catch (\Throwable $th) {

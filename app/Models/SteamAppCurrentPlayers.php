@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Watcher extends Model
+class SteamAppCurrentPlayers extends Model
 {
     use HasFactory;
 
-    protected $table = 'steam_watcher';
+    protected $table = 'steam_apps_current_players';
 
     protected $primaryKey = 'steam_appid';
 
@@ -20,9 +20,8 @@ class Watcher extends Model
      */
     protected $fillable = [
         'steam_appid',
-        'detail',
-        'price',
-        'current_players'
+        'player_count',
+        'result',
     ];
 
     /**
@@ -32,8 +31,7 @@ class Watcher extends Model
      */
     protected $casts = [
         'steam_appid'           => 'integer',
-        'detail'                => 'boolean',
-        'price'                 => 'boolean',
-        'current_players'       => 'boolean'
+        'player_count'          => 'integer',
+        'result'                => 'integer',
     ];
 }
