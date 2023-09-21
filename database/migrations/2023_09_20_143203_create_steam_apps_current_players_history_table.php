@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('steam_apps_current_players', function (Blueprint $table) {
+        Schema::create('steam_apps_current_players_history', function (Blueprint $table) {
             $table->id('steam_appid');
             $table->integer('player_count');
             $table->integer('result');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('steam_apps_current_players');
+        Schema::dropIfExists('steam_apps_current_players_history');
     }
 };

@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SteamAppCurrentPlayers extends Model
+class SteamAppPrice extends Model
 {
     use HasFactory;
 
-    protected $table = 'steam_apps_current_players_history';
+    protected $table = 'steam_apps_price_history';
 
     protected $primaryKey = 'steam_appid';
 
@@ -20,8 +20,12 @@ class SteamAppCurrentPlayers extends Model
      */
     protected $fillable = [
         'steam_appid',
-        'player_count',
-        'result',
+        'currency',
+        'initial',
+        'final',
+        'discount_percent',
+        'initial_formatted',
+        'final_formatted',
     ];
 
     /**
@@ -31,7 +35,11 @@ class SteamAppCurrentPlayers extends Model
      */
     protected $casts = [
         'steam_appid'           => 'integer',
-        'player_count'          => 'integer',
-        'result'                => 'integer',
+        'currency'              => 'string',
+        'initial'               => 'integer',
+        'final'                 => 'integer',
+        'discount_percent'      => 'double',
+        'initial_formatted'     => 'string',
+        'final_formatted'       => 'string',        
     ];
 }

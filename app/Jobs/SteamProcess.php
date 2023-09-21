@@ -3,8 +3,10 @@
 namespace App\Jobs;
 
 use App\Models\SteamApp;
+use App\Models\SteamAppPrice;
 use App\Models\SteamAppDetails;
 use App\Models\SteamAppCurrentPlayers;
+
 use App\Models\Watcher;
 
 use Illuminate\Support\Facades\Http;
@@ -32,9 +34,10 @@ class SteamProcess implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->fetchSteamCurrentPlayers();
+        //$this->fetchSteamCurrentPlayers();
         //$this->fetchSteamApps();
-        $this->fetchSteamAppsDetails();
+        //$this->fetchSteamAppsDetails();
+        $this->fetchSteamAppsPrices();
     }
     
     function fetchSteamApps() {
@@ -109,6 +112,33 @@ class SteamProcess implements ShouldQueue
                 ]);
                 $currentPlayers = $response['response'];
                 SteamAppCurrentPlayers::create($currentPlayers);
+            }
+            
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    function fetchSteamAppsPrices() {
+        
+        try {
+            
+            $apps = Watcher::where('price', true)->get();
+
+            $appids = "";
+            foreach ($apps as $key => $app) {
+                $appids .= $app->steam_appid . ",";
+            }
+            
+            $response = Http::get('http://store.steampowered.com/api/appdetails?appids', [
+                'appids'            => $appids,
+                'cc'                => 'BRA',
+                'filters'           => 'price_overview',
+            ]);
+
+            foreach ($apps as $key => $app) {
+                $price = $response[$app->steam_appid]['data']['price_overview'];
+                SteamAppPrice::create($price);
             }
             
         } catch (\Throwable $th) {
