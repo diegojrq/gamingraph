@@ -34,4 +34,9 @@ class SteamApp extends Model
         'last_modified'         => 'integer',
         'price_change_number'   => 'integer',
     ];
+
+    public function details()
+    {
+        return $this->hasOne(SteamAppDetails::class);
+    }
 }

@@ -34,10 +34,10 @@ class SteamProcess implements ShouldQueue
      */
     public function handle(): void
     {
+        $this->fetchSteamApps();
         //$this->fetchSteamCurrentPlayers();
-        //$this->fetchSteamApps();
         //$this->fetchSteamAppsDetails();
-        $this->fetchSteamAppsPrices();
+        //$this->fetchSteamAppsPrices();
     }
     
     function fetchSteamApps() {
