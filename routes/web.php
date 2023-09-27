@@ -15,7 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('apps', SteamAppController::class);
+//Route::apiResource('apps', SteamAppController::class);
+
+Route::prefix('apps')->group(function () {
+    Route::get('/{app}/{l?}', [SteamAppController::class, 'show']);
+});
 
 Route::get('/', function () {
     return view('welcome');

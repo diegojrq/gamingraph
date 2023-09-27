@@ -16,9 +16,19 @@ class SteamAppController extends Controller
         return $apps;
     }
 
-    public function show($id)
+    public function show(Request $request)
     {
-        $response = Http::get('http://store.steampowered.com/api/appdetails?appids=' . $id . '&cc=BRA');
+        $id = $request->route('app');
+        $language = $request->query('l') ?? 'EN';
+        $currency = $request->query('c') ?? 'US';
+
+        $fetchUrl = 'http://store.steampowered.com/api/appdetails?appids='
+            . $id . 
+            '&cc=' . $currency . 
+            '&l=' . $language;
+
+        // atualiza os detalhes sempre que o app é buscado
+        $response = Http::get($fetchUrl);
 
         $appDetails = SteamAppDetails::find($id);
         
