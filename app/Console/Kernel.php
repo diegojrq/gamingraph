@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Jobs\SteamProcess;
+use App\Jobs\IGDBJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->job(new SteamProcess)->withoutOverlapping();
+        //$schedule->job(new SteamProcess)->withoutOverlapping();
+        $schedule->job(new IGDBJob)->withoutOverlapping();
 
 
         // $schedule->command('inspire')->hourly();
