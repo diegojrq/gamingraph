@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SteamAppController;
+use App\Http\Controllers\GameController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('apps')->group(function () {
     Route::get('/{app}/{l?}', [SteamAppController::class, 'show']);
+});
+
+Route::prefix('games')->group(function () {
+    Route::get('/{game}', [GameController::class, 'show']);
 });
 
 Route::get('/', function () {
