@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class IGDBApp extends Model
+class IGDBGame extends Model
 {
     use HasFactory;
 
-    protected $table = 'igdb_apps';    
+    protected $table = 'igdb_games';
 
      /**
      * The attributes that are mass assignable.

@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\IGDBApp;
+use App\Models\IGDBGame;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Bus\Queueable;
@@ -36,7 +36,7 @@ class IGDBJob implements ShouldQueue
         try {            
     
             // isso é problema pro frontend
-            IGDBApp::truncate();
+            IGDBGame::truncate();
             
             $bearerToken = Http::post('https://id.twitch.tv/oauth2/token', [
                 'client_id'         => 'w7byces6yyoi42i67jkyg5tds1n1s7',
@@ -48,21 +48,48 @@ class IGDBJob implements ShouldQueue
 
             do {
 
-                $appsResponse = Http::withBody('fields *; limit 500; offset ' . $offset . ';')
+                $gamesResponse = Http::withBody('fields
+                    id,
+                    aggregated_rating,
+                    aggregated_rating_count,
+                    category,
+                    checksum,
+                    cover,
+                    created_at,
+                    first_release_date,
+                    follows,
+                    hypes,
+                    name,
+                    parent_game,
+                    rating,
+                    rating_count,
+                    slug,
+                    status,
+                    storyline,
+                    summary,
+                    total_rating,
+                    total_rating_count,
+                    updated_at,
+                    url,
+                    version_parent,
+                    version_title;
+                    
+                    limit 500; offset ' . $offset . ';')
                     ->withHeaders([
                         'Client-ID'         => 'w7byces6yyoi42i67jkyg5tds1n1s7',
                         'Authorization'     => 'Bearer ' . $bearerToken,
                     ])
                 ->post('https://api.igdb.com/v4/games');
 
-                $xCount = $appsResponse->headers()['X-Count'][0];
+                $xCount = $gamesResponse->headers()['X-Count'][0];
     
                 /* creates únicos para cada registro | demora demais */
 
-                $jsonDecoded = json_decode((string) $appsResponse->getBody(), true);
+                $jsonDecoded = json_decode((string) $gamesResponse->getBody(), true);
 
                 foreach ($jsonDecoded as $key => $value) {
-                    IGDBApp::create([
+
+                    IGDBGame::create([
                         'id'                            => $value['id'],
                         'aggregated_rating'             => $value['aggregated_rating'] ?? null,
                         'aggregated_rating_count'       => $value['aggregated_rating_count'] ?? null,
@@ -90,9 +117,6 @@ class IGDBJob implements ShouldQueue
                     ]);                            
                 }
                 //*/                
-
-                // criação em massa | mais rápido
-                //IGDBApp::insert($appsResponse->json());
 
                 $offset += 500;
 

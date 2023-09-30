@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('igdb_apps', function (Blueprint $table) {
+        Schema::create('igdb_games', function (Blueprint $table) {
             $table->integer('id');
 
             $table->double('aggregated_rating')->nullable();
@@ -45,6 +45,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('igdb_apps');
+        Schema::dropIfExists('igdb_games');
     }
 };
