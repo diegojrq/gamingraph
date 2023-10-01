@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::prefix('games')->group(function () {
+Route::prefix('game')->group(function () {
+    Route::get('/count', [GameController::class, 'getCount']);    
     Route::get('/{game}', [GameController::class, 'show']);
 });

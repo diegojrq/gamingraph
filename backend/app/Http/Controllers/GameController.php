@@ -37,6 +37,11 @@ class GameController extends Controller
         return $game;
     }
 
+    public function getCount()
+    {
+        return IGDBGame::count();
+    }
+
     public function store(Request $request)
     {
         return SteamApp::create($request->all());
