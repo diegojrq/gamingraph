@@ -33,14 +33,17 @@ class IGDBJob implements ShouldQueue
     }
     
     function fetchIGDBApps() {
-        try {            
-    
+        
+        try {    
             // isso é problema pro frontend
             IGDBGame::truncate();
+
+            $clientID       = 'hrnc6jbxh7wit61oupsz4sj1jrw2f1';
+            $clientSecret   = 'v1zbtu3eaj31xush9vpu63ha7wuvmg';
             
             $bearerToken = Http::post('https://id.twitch.tv/oauth2/token', [
-                'client_id'         => 'w7byces6yyoi42i67jkyg5tds1n1s7',
-                'client_secret'     => 'ftzvjaak1k6dkwz4436gc7y150o1aj',
+                'client_id'         => $clientID,
+                'client_secret'     => $clientSecret,
                 'grant_type'        => 'client_credentials',
             ])['access_token'];
 
@@ -48,43 +51,19 @@ class IGDBJob implements ShouldQueue
 
             do {
 
-                $gamesResponse = Http::withBody('fields
-                    id,
-                    aggregated_rating,
-                    aggregated_rating_count,
-                    category,
-                    checksum,
-                    cover,
-                    created_at,
-                    first_release_date,
-                    follows,
-                    hypes,
-                    name,
-                    parent_game,
-                    rating,
-                    rating_count,
-                    slug,
-                    status,
-                    storyline,
-                    summary,
-                    total_rating,
-                    total_rating_count,
-                    updated_at,
-                    url,
-                    version_parent,
-                    version_title;
-                    
-                    limit 500; offset ' . $offset . ';')
+                $gamesResponse = Http::withBody('fields id; limit 500; offset ' . $offset . ';')
                     ->withHeaders([
-                        'Client-ID'         => 'w7byces6yyoi42i67jkyg5tds1n1s7',
+                        'Client-ID'         => $clientID,
                         'Authorization'     => 'Bearer ' . $bearerToken,
                     ])
                 ->post('https://api.igdb.com/v4/games');
 
                 $xCount = $gamesResponse->headers()['X-Count'][0];
     
-                /* creates únicos para cada registro | demora demais */
+                IGDBGame::insert(json_decode((string) $gamesResponse->getBody(), true));
 
+                /* creates únicos para cada registro | demora demais para executar
+                
                 $jsonDecoded = json_decode((string) $gamesResponse->getBody(), true);
 
                 foreach ($jsonDecoded as $key => $value) {
@@ -123,6 +102,7 @@ class IGDBJob implements ShouldQueue
             } while ($offset <= $xCount);
             
         } catch (\Throwable $th) {
+            \Log::error($th);
             throw $th;
         }
     }

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('igdb_games', function (Blueprint $table) {
             $table->integer('id');
-
+            /*
             $table->double('aggregated_rating')->nullable();
             $table->integer('aggregated_rating_count')->nullable();
             $table->integer('category')->nullable();
@@ -37,6 +37,7 @@ return new class extends Migration
             $table->string('url')->nullable();
             $table->integer('version_parent')->nullable();
             $table->string('version_title')->nullable();
+            */
         });
     }
 

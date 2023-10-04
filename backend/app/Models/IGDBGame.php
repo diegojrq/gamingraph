@@ -18,6 +18,7 @@ class IGDBGame extends Model
      */
     protected $fillable = [
         'id',
+        /*
         'aggregated_rating',
         'aggregated_rating_count',
         'category',
@@ -41,6 +42,7 @@ class IGDBGame extends Model
         'url',
         'version_parent',
         'version_title',
+        */
     ];
 
     /**
@@ -50,6 +52,7 @@ class IGDBGame extends Model
      */
     protected $casts = [
         'id'                        => 'integer',
+        /*
         'aggregated_rating'         => 'double',
         'aggregated_rating_count'   => 'integer',
         'category'                  => 'integer',
@@ -73,6 +76,7 @@ class IGDBGame extends Model
         'url'                       => 'string',
         'version_parent'            => 'integer',
         'version_title'             => 'string',
+        */
     ];
 
     /*

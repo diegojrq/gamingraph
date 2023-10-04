@@ -2,13 +2,17 @@
   <v-container class="fill-height">
     <v-responsive class="align-center text-center fill-height">
       <v-row>
+        <v-col cols="12" md="12">
+          <FeaturedGame />
+        </v-col>
+      </v-row>
+      <v-row>
         <v-col cols="12" md="6">
           <GameCount />
         </v-col>
         <v-col cols="12" md="6">
           <GameCount />
         </v-col>
-
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
@@ -29,12 +33,11 @@
 <script>
 
 import GameCount from '@/components/dashboard/GameCount.vue'
-
-import { getGame } from '../services/game.service';
+import FeaturedGame from '@/components/FeaturedGame.vue'
 
 export default {
   name: "Dashboard",
-  components: { GameCount },
+  components: { GameCount, FeaturedGame },
   mixins: [],
   data() {
     return {
@@ -42,9 +45,6 @@ export default {
     }
   },
   created() {
-
-    getGame(10).then((response) => { this.user = response.data; });
-
   },
   methods: {    
   }

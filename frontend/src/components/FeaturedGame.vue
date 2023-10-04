@@ -13,14 +13,24 @@
     </template>
     <div class="div-wrapper-title">
       <div class="div-icon">
-        <v-icon size="70">mdi-gamepad-variant</v-icon>  
+        <v-img
+          cover
+          src="https://images.igdb.com/igdb/image/upload/t_thumb/co75ap.jpg"
+        ></v-img>
       </div>
       <div class="div-title">
-        <span class="text-h5">{{ gameCount }} games</span>
+        <div class="div-featured-game">
+          <p>featured game ot the day</p>
+        </div>
+        <v-divider></v-divider>        
+        <div class="div-game-name">
+          <p>{{ game.name }}</p>
+          <p>{{ game.name }}</p>
+        </div>
       </div>
     </div>
     <v-card-text class="v-card-text">
-      "Some trees flourish, others die. Some cattle grow strong, others are taken by wolves. Some men are born rich enough and dumb enough to enjoy their lives. Ain't nothing fair."
+      <p>{{ game.summary }}</p>
     </v-card-text>
     <v-divider></v-divider>
       <div class="div-updated-at">
@@ -31,18 +41,20 @@
 
 <script>
 
-import { getGameCount } from '@/services/game.service';
+import { getGame } from '../services/game.service';
 
 export default {
-  name: "GameCount",
+  name: "FeaturedGame",
   data() {
     return {
-      gameCount: '[loading ... ]',
+      game: [],
       loading: true,
     }
   },
   created() {
-    getGameCount().then((response) => { this.gameCount = response.data; this.loading = false; });
+    getGame(242408).then((response) => {
+      this.game = response.data;
+    });
   },
   methods: {    
   }
@@ -51,7 +63,7 @@ export default {
 </script>
 
 <style scoped>
-  .v-card {
+  .v-card {    
     margin-top: 20px;
     background-color: #333;
     color: #fff;
@@ -61,8 +73,8 @@ export default {
   }
 
   .div-icon {
-    width: 30%;
-    margin-top: -4%;
+    width: 20%;
+    margin-top: -5%;
     margin-left: 2%;
     border: 1px solid #fff;
     border-radius: 3%;
@@ -76,11 +88,11 @@ export default {
   }
 
   .div-title {
-    width: 70%;
-    margin-top: 2%;
-    width: 100%;
-    margin-right: 2%;    
+    width: 80%;
+    margin-top: -8%;
+    margin-right: 1%;    
     text-align: right;
+    
   }
 
   .v-card-text {    
@@ -92,5 +104,17 @@ export default {
     padding: 1%;
     font-size: 10px;
   }
+  
+  .div-game-name {
+    text-align: left;
+    padding: 1%;
+    font-size: 12px;
+  }
+  .div-featured-game {
+    text-align: right;
+    padding: 1%;
+    font-size: 10px;
+  }
+  
 
 </style>

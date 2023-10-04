@@ -17,22 +17,31 @@ class GameController extends Controller
 
     public function show(Request $request)
     {
-        $id = $request->route('game');
+        try {
+            $id = $request->route('game');
 
-        $bearerToken = Http::post('https://id.twitch.tv/oauth2/token', [
-            'client_id'         => 'w7byces6yyoi42i67jkyg5tds1n1s7',
-            'client_secret'     => 'ftzvjaak1k6dkwz4436gc7y150o1aj',
-            'grant_type'        => 'client_credentials',
-        ])['access_token'];
-
-        $gameResponse = Http::withBody('fields *; limit 1; where id = ' . $id . ';')
-            ->withHeaders([
-                'Client-ID'         => 'w7byces6yyoi42i67jkyg5tds1n1s7',
-                'Authorization'     => 'Bearer ' . $bearerToken,
-            ])
-        ->post('https://api.igdb.com/v4/games');
-
-        $game = $gameResponse->json()[0];
+            $clientID       = 'hrnc6jbxh7wit61oupsz4sj1jrw2f1';
+            $clientSecret   = 'v1zbtu3eaj31xush9vpu63ha7wuvmg';
+    
+            $bearerToken = Http::post('https://id.twitch.tv/oauth2/token', [
+                'client_id'         => $clientID,
+                'client_secret'     => $clientSecret,
+                'grant_type'        => 'client_credentials',
+            ])['access_token'];
+    
+            $gameResponse = Http::withBody('fields *; limit 1; where id = ' . $id . ';')
+                ->withHeaders([
+                    'Client-ID'         => $clientID,
+                    'Authorization'     => 'Bearer ' . $bearerToken,
+                ])
+            ->post('https://api.igdb.com/v4/games');
+    
+            $game = $gameResponse->json()[0];
+            
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            throw $th;
+        }
 
         return $game;
     }
