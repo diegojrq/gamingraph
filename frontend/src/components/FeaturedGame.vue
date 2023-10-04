@@ -11,24 +11,43 @@
         indeterminate
       ></v-progress-linear>
     </template>
-    <div class="div-wrapper-title">
-      <div class="div-icon">
-        <v-img
-          cover
-          src="https://images.igdb.com/igdb/image/upload/t_thumb/co75ap.jpg"
-        ></v-img>
-      </div>
-      <div class="div-title">
+    <v-row>
+      <v-col cols="12" md="2">
+        <div class="div-wrapper-title">
+          <v-img
+            class="img-cover"
+            cover
+            src="https://images.igdb.com/igdb/image/upload/t_thumb/co75ap.jpg"
+          ></v-img>
+
+        </div>
+
+        
+      </v-col>
+      <v-col cols="12" md="10">
         <div class="div-featured-game">
           <p>featured game ot the day</p>
         </div>
-        <v-divider></v-divider>        
-        <div class="div-game-name">
-          <p>{{ game.name }}</p>
-          <p>{{ game.name }}</p>
-        </div>
-      </div>
-    </div>
+        <v-divider></v-divider>
+        <v-row>
+          <v-col cols="12" md="6">
+            <div class="div-game-name">
+              <p>{{ game.name }}</p>
+              <p>{{ game.name }}</p>
+              <p>{{ game.name }}</p>
+              <p>{{ game.name }}</p>
+              <p>{{ game.name }}</p>
+              <p>{{ game.name }}</p>
+              <p>{{ game.name }}</p>
+            </div>            
+          </v-col>
+          <v-col cols="12" md="6">
+            <p>release date</p>
+          </v-col>
+        </v-row>
+
+      </v-col>
+    </v-row>   
     <v-card-text class="v-card-text">
       <p>{{ game.summary }}</p>
     </v-card-text>
@@ -67,32 +86,24 @@ export default {
     margin-top: 20px;
     background-color: #333;
     color: #fff;
-    border: 2px solid #fff;
-    overflow: initial;
-    z-index: initial;
+    border: 2px solid #fff;    
   }
 
-  .div-icon {
-    width: 20%;
-    margin-top: -5%;
-    margin-left: 2%;
+  .img-cover {
+    width: 92%;
+    margin: 4%;
+    
     border: 1px solid #fff;
-    border-radius: 3%;
+    border-radius: 1%;
   }
 
-  .div-wrapper-title {
-    display: flex;
-    flex-direction: row;
-    justify-content: right;
-    align-items: center;
-  }
+
 
   .div-title {
     width: 80%;
-    margin-top: -8%;
-    margin-right: 1%;    
+    margin: 1%;    
     text-align: right;
-    
+    border: 1px solid #fff;
   }
 
   .v-card-text {    
@@ -108,7 +119,7 @@ export default {
   .div-game-name {
     text-align: left;
     padding: 1%;
-    font-size: 12px;
+    font-size: 1em;
   }
   .div-featured-game {
     text-align: right;

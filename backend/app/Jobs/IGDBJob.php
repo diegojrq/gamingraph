@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\IGDBGame;
+use App\Models\JobTracker;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Bus\Queueable;
@@ -30,11 +31,14 @@ class IGDBJob implements ShouldQueue
     public function handle(): void
     {
         $this->fetchIGDBApps();
+        //$this->fetchIGDBAppsDetails();
     }
     
     function fetchIGDBApps() {
         
         try {    
+
+            $job = JobTracker::init('fetchIGDBApps');
             // isso é problema pro frontend
             IGDBGame::truncate();
 
@@ -100,10 +104,43 @@ class IGDBJob implements ShouldQueue
                 $offset += 500;
 
             } while ($offset <= $xCount);
+
+            JobTracker::finish($job, true);
             
         } catch (\Throwable $th) {
+            JobTracker::finish($job, false, $th->getMessage());
             \Log::error($th);
             throw $th;
+        }
+    }
+
+    function fetchIGDBAppsDetails() {
+        
+        $job = JobTracker::init('fetchIGDBAppsDetails');
+
+        try {
+
+            $clientID       = 'hrnc6jbxh7wit61oupsz4sj1jrw2f1';
+            $clientSecret   = 'v1zbtu3eaj31xush9vpu63ha7wuvmg';
+            
+            $bearerToken = Http::post('https://id.twitch.tv/oauth2/token', [
+                'client_id'         => $clientID,
+                'client_secret'     => $clientSecret,
+                'grant_type'        => 'client_credentials',
+            ])['access_token'];
+            
+            $gamesResponse = Http::withBody('fields *; where id = 242408;')
+                ->withHeaders([
+                    'Client-ID'         => $clientID,
+                    'Authorization'     => 'Bearer ' . $bearerToken,
+                ])
+            ->post('https://api.igdb.com/v4/games');
+
+            JobTracker::finish($job, true);
+
+        } catch (\Throwable $th) {            
+            JobTracker::finish($job, false, $th->getMessage());
+            \Log::error($th);
         }
     }
     
