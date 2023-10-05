@@ -5,18 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class IGDBGame extends Model
+class Parameters extends Model
 {
     use HasFactory;
 
-    protected $table = 'igdb_games';
+    protected $table = 'parameters';
+
+    protected $primaryKey = 'id';
 
      /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = ['id'];
+    protected $fillable = ['name', 'value'];
 
     /**
      * The attributes that should be cast.
@@ -24,7 +26,9 @@ class IGDBGame extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'id' => 'integer'];
+        'name' => 'string',
+        'value' => 'string'
+    ];        
 
     /*
     public function details()

@@ -19,10 +19,7 @@
             cover
             src="https://images.igdb.com/igdb/image/upload/t_thumb/co75ap.jpg"
           ></v-img>
-
         </div>
-
-        
       </v-col>
       <v-col cols="12" md="10">
         <div class="div-featured-game">
