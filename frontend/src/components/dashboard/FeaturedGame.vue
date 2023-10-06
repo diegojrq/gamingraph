@@ -12,52 +12,59 @@
       ></v-progress-linear>
     </template>
     <v-row>
-      <v-col cols="12" md="2">
-        <div class="div-wrapper-title">
-          <v-img
-            class="img-cover"
-            cover
-            src="https://images.igdb.com/igdb/image/upload/t_thumb/co75ap.jpg"
-          ></v-img>
-        </div>
-      </v-col>
-      <v-col cols="12" md="10">
+      <v-col cols="12" md="12">
         <div class="div-featured-game">
           <p>featured game ot the day</p>
         </div>
         <v-divider></v-divider>
-        <v-row>
-          <v-col cols="12" md="6">
-            <div class="div-game-name">
-              <p>{{ game.name }}</p>
-              <p>{{ game.name }}</p>
-              <p>{{ game.name }}</p>
-              <p>{{ game.name }}</p>
-              <p>{{ game.name }}</p>
-              <p>{{ game.name }}</p>
-              <p>{{ game.name }}</p>
-            </div>            
-          </v-col>
-          <v-col cols="12" md="6">
-            <p>release date</p>
-          </v-col>
-        </v-row>
-
       </v-col>
-    </v-row>   
-    <v-card-text class="v-card-text">
-      <p>{{ game.summary }}</p>
-    </v-card-text>
-    <v-divider></v-divider>
-      <div class="div-updated-at">
-        <p>updated at</p>
-      </div>
+    </v-row>
+    <div v-if="loaded">
+      <v-row>
+        <v-col cols="12" md="2">
+          <div class="div-wrapper-title">
+            <v-img
+              
+              class="img-cover"
+              cover
+              :src="`${ game.cover.url }`"
+            ></v-img>
+          </div>
+        </v-col>
+        <v-col cols="12" md="10">
+          <v-row>
+            <v-col cols="12" md="6">
+              <div class="div-game-name">
+                <p>{{ game.name }}</p>
+                <p>{{ game.name }}</p>
+                <p>{{ game.name }}</p>
+                <p>{{ game.name }}</p>
+                <p>{{ game.name }}</p>
+                <p>{{ game.name }}</p>
+                <p>{{ game.name }}</p>
+              </div>            
+            </v-col>
+            <v-col cols="12" md="6">
+              <p>release date</p>
+            </v-col>
+          </v-row>
+  
+        </v-col>
+      </v-row>   
+      <v-card-text class="v-card-text">
+        <p>{{ game.summary }}</p>
+      </v-card-text>
+      <v-divider></v-divider>
+        <div class="div-updated-at">
+          <p>updated at</p>
+        </div>
+    </div>
   </v-card>
 </template>
 
 <script>
 
-import { getGame } from '../services/game.service';
+import { getGame } from '@/services/game.service';
 
 export default {
   name: "FeaturedGame",
@@ -65,11 +72,13 @@ export default {
     return {
       game: [],
       loading: true,
+      loaded: false,
     }
   },
   created() {
-    getGame(242408).then((response) => {
+    getGame(148241).then((response) => {
       this.game = response.data;
+      this.loaded = true;
     });
   },
   methods: {    

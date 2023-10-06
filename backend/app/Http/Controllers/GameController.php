@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\IGDBUpdateGameDetailsJob;
+use App\Jobs\IGDBUpdateGameJob;
 
 use App\Models\Parameters;
 use App\Models\IGDBGame;
-use App\Models\IGDBGameDetails;
+use App\Models\IGDBGameCover;
+use App\Models\IGDBGameStage;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 class GameController extends Controller
 {
@@ -25,17 +27,19 @@ class GameController extends Controller
         try {
             $id = $request->route('game');
 
-            $game = IGDBGameDetails::find($id);
+            $game = IGDBGame::find($id);
 
-            // if the game is already in the database
+            // if the game is already in the local database
             if ($game) {
+
+                $game->load('cover');
 
                 $timeToUpdateIGDBGame = Parameters::where('name', 'time_to_update_igdb_game')->firstOrFail()->value;
 
                 // check if the game was updated recently
                 // if not, dispatch a job to update it asynchronously (queue)
                 if (time() - $game->updated_locally_at->timestamp > $timeToUpdateIGDBGame) {                    
-                    dispatch((new IGDBUpdateGameDetailsJob($game))->delay(Carbon::now()->addSeconds(5)));
+                    dispatch((new IGDBUpdateGameJob($game)));
                 }
 
             } else {
@@ -50,7 +54,7 @@ class GameController extends Controller
                     'grant_type'        => 'client_credentials',
                 ])['access_token'];
         
-                $gameResponse = Http::withBody('fields *; limit 1; where id = ' . $id . ';')
+                $gameResponse = Http::withBody('fields *, cover.*; limit 1; where id = ' . $id . ';')
                     ->withHeaders([
                         'Client-ID'         => $clientID,
                         'Authorization'     => 'Bearer ' . $bearerToken,
@@ -59,15 +63,29 @@ class GameController extends Controller
 
                 $createJson = $gameResponse->json()[0];
                 
+                // add the local timestamps
                 $time = time();
                 $createJson['created_locally_at'] = $time;
                 $createJson['updated_locally_at'] = $time;
-                $game = IGDBGameDetails::create($createJson);
+
+                // the cover is a nested object, so we need to create it separately
+                $coverJson = $createJson['cover'];
+                $createJson['cover'] = $coverJson['id'];
+
+                DB::beginTransaction();
+
+                    $cover = IGDBGameCover::create($coverJson);
+                    $game = IGDBGame::create($createJson);
+
+                DB::commit();
+
+                $game->load('cover');
             }
 
             return $game;
             
         } catch (\Throwable $th) {
+            DB::rollBack();
             \Log::error($th);
             throw $th;
         }
@@ -76,7 +94,7 @@ class GameController extends Controller
 
     public function getCount()
     {
-        return IGDBGame::count();
+        return IGDBGameStage::count();
     }
 
     public function store(Request $request)

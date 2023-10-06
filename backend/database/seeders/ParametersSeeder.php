@@ -23,7 +23,7 @@ class ParametersSeeder extends Seeder
                 [
                     'name'	        => 'time_to_update_igdb_game',
                     'description'   => 'Time to update IGDB games in seconds',
-                    'value'         => '864000',
+                    'value'         => '1',
                     'created_at'    => now(),
                     'updated_at'    => now()
                 ]                                

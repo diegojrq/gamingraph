@@ -52,11 +52,4 @@ class JobTracker extends Model
 
         return $job;
     }
-
-    /*
-    public function details()
-    {
-        return $this->hasOne(SteamAppDetails::class);
-    }
-    */
 }

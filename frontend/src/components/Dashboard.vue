@@ -2,16 +2,16 @@
   <v-container class="fill-height">
     <v-responsive class="align-center text-center fill-height">
       <v-row>
-        <v-col cols="12" md="12">
-          <FeaturedGame />
+        <v-col cols="12" md="6">
+          <GameCount />
+        </v-col>
+        <v-col cols="12" md="6">
+          <GameCount />
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="6">
-          <GameCount />
-        </v-col>
-        <v-col cols="12" md="6">
-          <GameCount />
+        <v-col cols="12" md="12">
+          <FeaturedGame />
         </v-col>
       </v-row>
       <v-row>
@@ -33,7 +33,7 @@
 <script>
 
 import GameCount from '@/components/dashboard/GameCount.vue'
-import FeaturedGame from '@/components/FeaturedGame.vue'
+import FeaturedGame from '@/components/dashboard/FeaturedGame.vue'
 
 export default {
   name: "Dashboard",

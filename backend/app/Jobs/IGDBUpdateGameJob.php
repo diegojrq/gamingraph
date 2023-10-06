@@ -2,7 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Models\IGDBGameDetails;
+use App\Models\IGDBGame;
+use App\Models\IGDBGameCover;
 use App\Models\JobTracker;
 
 use Illuminate\Support\Facades\Http;
@@ -12,8 +13,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
-class IGDBUpdateGameDetailsJob implements ShouldQueue
+class IGDBUpdateGameJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -22,7 +24,7 @@ class IGDBUpdateGameDetailsJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(IGDBGameDetails $game)
+    public function __construct(IGDBGame $game)
     {
         $this->game = $game;
     }
@@ -32,12 +34,13 @@ class IGDBUpdateGameDetailsJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->updateIGDBGameDetails($this->game->id);
+        $this->updateIGDBGame($this->game->id);
     }
 
-    function updateIGDBGameDetails($gameID) {
+    function updateIGDBGame($gameID) {
         
-        $job = JobTracker::init('updateIGDBGameDetails');
+        // log the job
+        $job = JobTracker::init('updateIGDBGame');
 
         try {
 
@@ -50,7 +53,7 @@ class IGDBUpdateGameDetailsJob implements ShouldQueue
                 'grant_type'        => 'client_credentials',
             ])['access_token'];
             
-            $gameResponse = Http::withBody('fields *; where id = ' . $gameID .';')
+            $gameResponse = Http::withBody('fields *, cover.*; where id = ' . $gameID .';')
                 ->withHeaders([
                     'Client-ID'         => $clientID,
                     'Authorization'     => 'Bearer ' . $bearerToken,
@@ -58,10 +61,21 @@ class IGDBUpdateGameDetailsJob implements ShouldQueue
             ->post('https://api.igdb.com/v4/games');
 
             $updateJson = $gameResponse->json()[0];
-            date_default_timezone_set('America/Maceio');            
+            
             $updateJson['updated_locally_at'] = time();            
 
-            IGDBGameDetails::find($gameID)->update($updateJson);
+            // the cover is a nested object, so we need to create it separately
+            $coverJson = $updateJson['cover'];
+            $updateJson['cover'] = $coverJson['id'];
+
+            $game = IGDBGame::find($gameID);
+
+            DB::beginTransaction();
+
+                $game->cover()->update($coverJson);
+                $game->update($updateJson);
+
+            DB::commit();
 
             JobTracker::finish($job, true);
 

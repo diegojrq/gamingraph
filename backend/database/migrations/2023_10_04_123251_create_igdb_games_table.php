@@ -12,13 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('igdb_games', function (Blueprint $table) {
-            $table->integer('id');
-            /*
+            $table->integer('id')->primary()->index();
             $table->double('aggregated_rating')->nullable();
             $table->integer('aggregated_rating_count')->nullable();
             $table->integer('category')->nullable();
             $table->string('checksum')->nullable();
-            $table->integer('cover')->nullable();
             $table->datetime('created_at')->nullable();
             $table->datetime('first_release_date')->nullable();
             $table->integer('follows')->nullable();
@@ -37,7 +35,9 @@ return new class extends Migration
             $table->string('url')->nullable();
             $table->integer('version_parent')->nullable();
             $table->string('version_title')->nullable();
-            */
+            
+            $table->datetime('created_locally_at')->nullable();
+            $table->datetime('updated_locally_at')->nullable();
         });
     }
 
