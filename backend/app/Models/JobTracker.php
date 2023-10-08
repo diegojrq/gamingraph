@@ -45,7 +45,7 @@ class JobTracker extends Model
     public static function finish($job, $outcome, string $message = null)
     {
         $job->update([
-            'job_status'    => 'finished',
+            'job_status'    => $outcome ? 'success' : 'failed',
             'job_outcome'   => $outcome ? 'success' : $message,
             'job_end'       => now(),
         ]);

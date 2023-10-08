@@ -16,7 +16,17 @@ class IGDBGameCover extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['id', 'game', 'alpha_channel', 'animated', 'checksum', 'height', 'image_id', 'url', 'width'];
+    protected $fillable = [
+        'id',
+        'game',
+        'alpha_channel',
+        'animated',
+        'checksum',
+        'height',
+        'image_id',
+        'url',
+        'width'
+    ];
 
     /**
      * The attributes that should be cast.

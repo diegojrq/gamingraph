@@ -2,11 +2,9 @@
   <v-container class="fill-height">
     <v-responsive class="align-center text-center fill-height">
       <v-row>
-        <v-col cols="12" md="6">
-          <GameCount />
+        <v-col cols="12" md="6">          
         </v-col>
         <v-col cols="12" md="6">
-          <GameCount />
         </v-col>
       </v-row>
       <v-row>
@@ -16,15 +14,12 @@
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
-          <GameCount />
+        </v-col>
+        <v-col cols="12" md="4">
         </v-col>
         <v-col cols="12" md="4">
           <GameCount />
         </v-col>
-        <v-col cols="12" md="4">
-          <GameCount />
-        </v-col>
-
       </v-row>
     </v-responsive>
   </v-container>

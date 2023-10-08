@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Facades\Http;
+
 class IGDBGame extends Model
 {
     use HasFactory;
@@ -83,4 +85,11 @@ class IGDBGame extends Model
     {
         return $this->hasOne(IGDBGameCover::class, 'id', 'cover');
     }
+
+    public function involvedCompanies()
+    {
+        return $this->hasMany(IGDBInvolvedCompany::class, 'game', 'id');
+    }
+
+    
 }

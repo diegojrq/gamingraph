@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('igdb_games_covers', function (Blueprint $table) {
-            $table->integer('id')->primary()->unique();
+            $table->id();
             $table->boolean('alpha_channel')->nullable();
             $table->boolean('animated')->nullable();            
             $table->string('checksum')->nullable();
-            $table->string('game')->nullable();
+            $table->integer('game')->nullable();
             $table->integer('height')->nullable();
             $table->string('image_id')->nullable();
             $table->string('url')->nullable();
