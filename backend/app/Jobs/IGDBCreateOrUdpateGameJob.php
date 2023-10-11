@@ -47,27 +47,31 @@ class IGDBCreateOrUdpateGameJob implements ShouldQueue
     function createIGDBGame($game) {
         
         // log the job
-        $job = JobTracker::init('createIGDBGame');
+        $job = JobTracker::init('IGDBCreateGameJob');
 
         try {
-
-            // the cover is a nested object, so we need to create it separately
-            $coverJson = $game['cover'];
-            $game['cover'] = $coverJson['id'];
 
             // fixed timestamps
             $time = time();
 
+            // the cover is a nested object, so we need to create it separately
+            if (array_key_exists('cover', $game)) {
+
+                $coverJson = $game['cover'];
+                $game['cover'] = $coverJson['id'];
+                
+                $cover = (new IGDBCoverController($coverJson))->createOrUpdateCover();
+            }
+            
             $game['created_locally_at'] = $time;
             $game['updated_locally_at'] = $time;
 
-            $involvedCompaniesArray = $game['involved_companies'];
+            IGDBGame::create($game);
 
-            $cover = (new IGDBCoverController($coverJson))->createOrUpdateCover();
-
-            $game = IGDBGame::create($game);
-
-            $involvedCompanies = (new IGDBInvolvedCompaniesController($involvedCompaniesArray))->createOrUpdateInvolvedCompanies();
+            if (array_key_exists('involved_companies', $game)) {
+                $involvedCompaniesArray = $game['involved_companies'];
+                $involvedCompanies = (new IGDBInvolvedCompaniesController($involvedCompaniesArray))->createOrUpdateInvolvedCompanies();
+            }
 
             JobTracker::finish($job, true);
 
@@ -80,7 +84,7 @@ class IGDBCreateOrUdpateGameJob implements ShouldQueue
     function updateIGDBGame($gameID) {
         
         // log the job
-        $job = JobTracker::init('updateIGDBGame');
+        $job = JobTracker::init('IGDBUdpateGameJob');
 
         try {
 
@@ -93,7 +97,13 @@ class IGDBCreateOrUdpateGameJob implements ShouldQueue
                 'grant_type'        => 'client_credentials',
             ])['access_token'];
             
-            $gameResponse = Http::withBody('fields *, cover.*; where id = ' . $gameID .';')
+            $gameResponse = Http::withBody('
+                    fields *,
+                    cover.*,
+                    involved_companies.*,
+                    involved_companies.company.*;
+                    where id = ' . $gameID .';'
+                )
                 ->withHeaders([
                     'Client-ID'         => $clientID,
                     'Authorization'     => 'Bearer ' . $bearerToken,
@@ -104,18 +114,22 @@ class IGDBCreateOrUdpateGameJob implements ShouldQueue
             
             $updateJson['updated_locally_at'] = time();            
 
-            // the cover is a nested object, so we need to create it separately
-            $coverJson = $updateJson['cover'];
-            $updateJson['cover'] = $coverJson['id'];
-
             $game = IGDBGame::find($gameID);
 
-            DB::beginTransaction();
+            // the cover is a nested object, so we need to create it separately
+            if (array_key_exists('cover', $updateJson)) {
+                $coverJson = $updateJson['cover'];
+                $updateJson['cover'] = $coverJson['id'];
+                //$game->cover()->update($coverJson);
+                $cover = (new IGDBCoverController($coverJson))->createOrUpdateCover();
+            }
 
-                $game->cover()->update($coverJson);
-                $game->update($updateJson);
+            if (array_key_exists('involved_companies', $updateJson)) {
+                $involvedCompaniesArray = $updateJson['involved_companies'];
+                $involvedCompanies = (new IGDBInvolvedCompaniesController($involvedCompaniesArray))->createOrUpdateInvolvedCompanies();
+            }
 
-            DB::commit();
+            $game->update($updateJson);
 
             JobTracker::finish($job, true);
 

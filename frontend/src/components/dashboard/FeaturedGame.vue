@@ -1,7 +1,7 @@
 <template>
   <v-card
     :loading="loading"
-    class="mx-auto v-card"    
+    class="mx-auto v-card"
   >
     <template v-slot:loader="{ isActive }">
       <v-progress-linear
@@ -25,7 +25,7 @@
           <v-col cols="12" md="2">
             <div class="div-wrapper-title">
               <v-img
-                
+                v-if="game.cover"                
                 class="img-cover"
                 cover
                 :src="`${ game.cover.url }`"
@@ -49,6 +49,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-progress-circular
+                  v-if="game.rating"
                   :rotate="360"
                   :size="100"
                   :width="12"
@@ -100,8 +101,9 @@ export default {
     clearInterval(this.interval)
   },
   created() {
-    getGame(148241).then((response) => {
+    getGame(85450).then((response) => {
       this.game = response.data;
+      console.log(this.game.cover);
       this.loaded = true;
       this.loading = false;
       

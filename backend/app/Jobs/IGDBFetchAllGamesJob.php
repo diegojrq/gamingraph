@@ -5,6 +5,8 @@ namespace App\Jobs;
 use App\Models\IGDBGameStage;
 use App\Models\JobTracker;
 
+use App\Jobs\IGDBCreateOrUdpateGameJob;
+
 use Illuminate\Support\Facades\Http;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -13,7 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class IGDBJob implements ShouldQueue
+class IGDBFetchAllGamesJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -30,16 +32,15 @@ class IGDBJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->fetchIGDBGamesIDs();
-        //$this->fetchIGDBGames();
+        $this->fetchAllIGDBGames();
     }
     
-    function fetchIGDBGamesIDs() {
+    function fetchAllIGDBGames() {
         
         try {    
 
             // log the job
-            $job = JobTracker::init('fetchIGDBGamesIDs');
+            $job = JobTracker::init('IGDBFetchAllGamesJob');
             
             // this must be fixed
             IGDBGameStage::truncate();
@@ -58,7 +59,13 @@ class IGDBJob implements ShouldQueue
             // fetch 500 games at a time, ultil the X-Count header is reached
             do {
 
-                $gamesResponse = Http::withBody('fields id; limit 500; offset ' . $offset . ';')
+                $gamesResponse = Http::withBody('
+                        fields *,
+                        cover.*,
+                        involved_companies.*,
+                        involved_companies.company.*;
+                        limit 500; offset ' . $offset . ';'
+                    )
                     ->withHeaders([
                         'Client-ID'         => $clientID,
                         'Authorization'     => 'Bearer ' . $bearerToken,
@@ -66,9 +73,14 @@ class IGDBJob implements ShouldQueue
                 ->post('https://api.igdb.com/v4/games');
 
                 $xCount = $gamesResponse->headers()['X-Count'][0];
-    
-                IGDBGameStage::insert(json_decode((string) $gamesResponse->getBody(), true));             
 
+                $games = $gamesResponse->json();
+                
+                foreach ($games as $key => $game) {
+                    // create or update single game via job                
+                    dispatch((new IGDBCreateOrUdpateGameJob($game)));
+                }
+                
                 $offset += 500;
 
             } while ($offset <= $xCount);
@@ -81,35 +93,4 @@ class IGDBJob implements ShouldQueue
             throw $th;
         }
     }
-
-    function fetchIGDBGames() {
-        
-        $job = JobTracker::init('fetchIGDBAppsDetails');
-
-        try {
-
-            $clientID       = 'hrnc6jbxh7wit61oupsz4sj1jrw2f1';
-            $clientSecret   = 'v1zbtu3eaj31xush9vpu63ha7wuvmg';
-            
-            $bearerToken = Http::post('https://id.twitch.tv/oauth2/token', [
-                'client_id'         => $clientID,
-                'client_secret'     => $clientSecret,
-                'grant_type'        => 'client_credentials',
-            ])['access_token'];
-            
-            $gamesResponse = Http::withBody('fields *; where id = 242408;')
-                ->withHeaders([
-                    'Client-ID'         => $clientID,
-                    'Authorization'     => 'Bearer ' . $bearerToken,
-                ])
-            ->post('https://api.igdb.com/v4/games');
-
-            JobTracker::finish($job, true);
-
-        } catch (\Throwable $th) {            
-            JobTracker::finish($job, false, $th->getMessage());
-            \Log::error($th);
-        }
-    }
-    
 }

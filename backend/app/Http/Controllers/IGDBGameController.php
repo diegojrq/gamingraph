@@ -54,8 +54,8 @@ class IGDBGameController extends Controller
                     'grant_type'        => 'client_credentials',
                 ])['access_token'];
     
-                $game = Http::withBody(
-                        'fields *,
+                $game = Http::withBody('
+                        fields *,
                         cover.*,
                         involved_companies.*,
                         involved_companies.company.*;

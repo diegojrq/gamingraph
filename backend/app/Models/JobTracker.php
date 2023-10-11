@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Job;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,7 +20,7 @@ class JobTracker extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['job_name', 'job_status', 'job_start', 'job_outcome', 'job_end'];
+    protected $fillable = ['job', 'job_name', 'job_status', 'job_start', 'job_outcome', 'job_end'];
 
     /**
      * The attributes that should be cast.
@@ -26,6 +28,7 @@ class JobTracker extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'job'           => 'integer',
         'job_name'      => 'string',
         'job_status'    => 'string',
         'job_outcome'   => 'string',
@@ -35,11 +38,17 @@ class JobTracker extends Model
 
     public static function init($jobName)
     {
-        return JobTracker::create([
-            'job_name'      => $jobName,
-            'job_status'    => 'running',
-            'job_start'     => now(),
-        ]);
+        try {
+            return JobTracker::create([
+                'job'           => Job::where('name', $jobName)->first()->id,
+                'job_name'      => $jobName,
+                'job_status'    => 'running',
+                'job_start'     => now(),
+            ]);
+            //code...
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     public static function finish($job, $outcome, string $message = null)
