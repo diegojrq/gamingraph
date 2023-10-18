@@ -14,6 +14,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(ParametersSeeder::class);
         $this->call(JobsSeeder::class);
+
+        // IGDB Enums
+        $this->call(IGDBGameCategoriesEnumSeeder::class);
+        
         
         //$this->call(IGDBGamesStageSeeder::class);
 

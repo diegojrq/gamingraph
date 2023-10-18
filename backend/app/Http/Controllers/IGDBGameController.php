@@ -32,7 +32,8 @@ class IGDBGameController extends Controller
                 $game
                     ->load('cover')
                     ->load('involvedCompanies')
-                    ->load('involvedCompanies.company');
+                    ->load('involvedCompanies.company')
+                    ->load('category');
     
                 $timeToUpdateIGDBGame = Parameters::where('name', 'time_to_update_igdb_game')->firstOrFail()->value;
     

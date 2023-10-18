@@ -91,5 +91,10 @@ class IGDBGame extends Model
         return $this->hasMany(IGDBInvolvedCompany::class, 'game', 'id');
     }
 
+    public function category()
+    {
+        return $this->hasOne(IGDBGameCategoryEnum::class, 'id', 'category');
+    }
+
     
 }
