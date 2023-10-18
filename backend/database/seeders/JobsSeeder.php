@@ -51,7 +51,40 @@ class JobsSeeder extends Seeder
                     'source'        => 'IGDB',
                     'created_at'    => now(),
                     'updated_at'    => now()
-                ]
+                ],
+                [
+                    'name'	        => 'IGDBFetchGenresJob',
+                    'description'   => 'Job that fetchs all genres from IGDB',
+                    'class'         => 'App\Jobs\IGDBFetchGenresJob',
+                    'source'        => 'IGDB',
+                    'created_at'    => now(),
+                    'updated_at'    => now()
+                ],
+                [
+                    'name'	        => 'IGDBFetchGameModesJob',
+                    'description'   => 'Job that fetchs all game modes from IGDB',
+                    'class'         => 'App\Jobs\IGDBFetchGameModesJob',
+                    'source'        => 'IGDB',
+                    'created_at'    => now(),
+                    'updated_at'    => now()
+                ],
+                [
+                    'name'	        => 'IGDBFetchPlayerPerspectivesJob',
+                    'description'   => 'Job that fetchs all player perspectives from IGDB',
+                    'class'         => 'App\Jobs\IGDBFetchPlayerPerspectivesJob',
+                    'source'        => 'IGDB',
+                    'created_at'    => now(),
+                    'updated_at'    => now()
+                ],
+                [
+                    'name'	        => 'IGDBFetchThemesJob',
+                    'description'   => 'Job that fetchs all themes from IGDB',
+                    'class'         => 'App\Jobs\IGDBFetchThemesJob',
+                    'source'        => 'IGDB',
+                    'created_at'    => now(),
+                    'updated_at'    => now()
+                ],
+                
             ]);
         }
     }
