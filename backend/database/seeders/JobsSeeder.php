@@ -21,14 +21,6 @@ class JobsSeeder extends Seeder
             DB::table('jobs')->insert([
 
                 [
-                    'name'	        => 'IGDBFetchAllGamesIDJob',
-                    'description'   => 'Job that fetches all games from IGDB (id only)',
-                    'class'         => 'App\Jobs\IGDBFetchAllGamesIDJob',
-                    'source'        => 'IGDB',
-                    'created_at'    => now(),
-                    'updated_at'    => now()
-                ],
-                [
                     'name'	        => 'IGDBFetchAllGamesJob',
                     'description'   => 'Job that fetches all games from IGDB (all data)',
                     'class'         => 'App\Jobs\IGDBFetchAllGamesJob',

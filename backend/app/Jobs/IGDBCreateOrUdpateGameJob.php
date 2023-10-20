@@ -66,11 +66,27 @@ class IGDBCreateOrUdpateGameJob implements ShouldQueue
             $game['created_locally_at'] = $time;
             $game['updated_locally_at'] = $time;
 
-            IGDBGame::create($game);
+            $createdGame = IGDBGame::create($game);
 
             if (array_key_exists('involved_companies', $game)) {
                 $involvedCompaniesArray = $game['involved_companies'];
                 $involvedCompanies = (new IGDBInvolvedCompaniesController($involvedCompaniesArray))->createOrUpdateInvolvedCompanies();
+            }
+
+            if (array_key_exists('genres', $game)) {
+                $createdGame->genres()->sync($game['genres']);
+            }
+
+            if (array_key_exists('game_modes', $game)) {
+                $createdGame->gameModes()->sync($game['game_modes']);
+            }
+
+            if (array_key_exists('player_perspectives', $game)) {
+                $createdGame->playerPerspectives()->sync($game['player_perspectives']);
+            }
+
+            if (array_key_exists('themes', $game)) {
+                $createdGame->themes()->sync($game['themes']);
             }
 
             JobTracker::finish($job, true);
@@ -101,7 +117,8 @@ class IGDBCreateOrUdpateGameJob implements ShouldQueue
                     fields *,
                     cover.*,
                     involved_companies.*,
-                    involved_companies.company.*;
+                    involved_companies.company.*                    
+                    ;
                     where id = ' . $gameID .';'
                 )
                 ->withHeaders([
@@ -127,6 +144,22 @@ class IGDBCreateOrUdpateGameJob implements ShouldQueue
             if (array_key_exists('involved_companies', $updateJson)) {
                 $involvedCompaniesArray = $updateJson['involved_companies'];
                 $involvedCompanies = (new IGDBInvolvedCompaniesController($involvedCompaniesArray))->createOrUpdateInvolvedCompanies();
+            }
+
+            if (array_key_exists('genres', $updateJson)) {
+                $game->genres()->sync($updateJson['genres']);
+            }
+
+            if (array_key_exists('game_modes', $updateJson)) {
+                $game->gameModes()->sync($updateJson['game_modes']);
+            }
+
+            if (array_key_exists('player_perspectives', $updateJson)) {
+                $game->playerPerspectives()->sync($updateJson['player_perspectives']);
+            }
+
+            if (array_key_exists('themes', $updateJson)) {
+                $game->themes()->sync($updateJson['themes']);
             }
 
             $game->update($updateJson);

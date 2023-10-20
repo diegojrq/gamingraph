@@ -33,7 +33,12 @@ class IGDBGameController extends Controller
                     ->load('cover')
                     ->load('involvedCompanies')
                     ->load('involvedCompanies.company')
-                    ->load('category');
+                    ->load('category')
+                    ->load('genres')
+                    ->load('gameModes')
+                    ->load('playerPerspectives')
+                    ->load('themes')
+                    ;
     
                 $timeToUpdateIGDBGame = Parameters::where('name', 'time_to_update_igdb_game')->firstOrFail()->value;
     
@@ -59,7 +64,13 @@ class IGDBGameController extends Controller
                         fields *,
                         cover.*,
                         involved_companies.*,
-                        involved_companies.company.*;
+                        involved_companies.company.*,
+                        category.*,
+                        genres.*,
+                        game_modes.*,
+                        player_perspectives.*,
+                        themes.*,
+                        ;
                         limit 1;
                         where id = ' . $this->gameId . ';'
                     )

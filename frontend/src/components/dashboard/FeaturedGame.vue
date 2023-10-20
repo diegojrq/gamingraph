@@ -101,7 +101,7 @@ export default {
     clearInterval(this.interval)
   },
   created() {
-    getGame(85450).then((response) => {
+    getGame(19164).then((response) => {
       this.game = response.data;
       console.log(this.game.cover);
       this.loaded = true;

@@ -96,5 +96,25 @@ class IGDBGame extends Model
         return $this->hasOne(IGDBGameCategoryEnum::class, 'id', 'category');
     }
 
+    public function genres()
+    {
+        return $this->belongsToMany(IGDBGenre::class, 'igdb_games_genres', 'game', 'genre');
+    }
+
+    public function gameModes()
+    {
+        return $this->belongsToMany(IGDBGameMode::class, 'igdb_games_game_modes', 'game', 'game_mode');
+    }
+
+    public function playerPerspectives()
+    {
+        return $this->belongsToMany(IGDBPlayerPerspective::class, 'igdb_games_player_perspectives', 'game', 'player_perspective');
+    }
+
+    public function themes()
+    {
+        return $this->belongsToMany(IGDBTheme::class, 'igdb_games_themes', 'game', 'theme');
+    }
+
     
 }

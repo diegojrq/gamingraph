@@ -64,14 +64,14 @@ class IGDBFetchThemesJob implements ShouldQueue
                         'Client-ID'         => $clientID,
                         'Authorization'     => 'Bearer ' . $bearerToken,
                     ])
-                ->post('https://api.igdb.com/v4/genres');
+                ->post('https://api.igdb.com/v4/themes');
 
                 $xCount = $gamesResponse->headers()['X-Count'][0];
 
-                foreach ($gamesResponse->json() as $genre) {
+                foreach ($gamesResponse->json() as $theme) {
                     IGDBTheme::updateOrCreate(
-                        ['id' => $genre['id']],
-                        $genre
+                        ['id' => $theme['id']],
+                        $theme
                     );    
                 }
 

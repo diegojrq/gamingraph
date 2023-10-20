@@ -68,10 +68,10 @@ class IGDBFetchGameModesJob implements ShouldQueue
 
                 $xCount = $gamesResponse->headers()['X-Count'][0];
 
-                foreach ($gamesResponse->json() as $genre) {
+                foreach ($gamesResponse->json() as $gm) {
                     IGDBGameMode::updateOrCreate(
-                        ['id' => $genre['id']],
-                        $genre
+                        ['id' => $gm['id']],
+                        $gm
                     );    
                 }
 

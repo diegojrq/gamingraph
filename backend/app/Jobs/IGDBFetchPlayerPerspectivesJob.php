@@ -68,10 +68,10 @@ class IGDBFetchPlayerPerspectivesJob implements ShouldQueue
 
                 $xCount = $gamesResponse->headers()['X-Count'][0];
 
-                foreach ($gamesResponse->json() as $genre) {
+                foreach ($gamesResponse->json() as $pp) {
                     IGDBPlayerPerspective::updateOrCreate(
-                        ['id' => $genre['id']],
-                        $genre
+                        ['id' => $pp['id']],
+                        $pp
                     );    
                 }
 
