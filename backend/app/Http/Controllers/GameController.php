@@ -7,7 +7,6 @@ use App\Http\Controllers\IGDBGameController;
 use App\Models\Parameters;
 use App\Models\IGDBGame;
 use App\Models\IGDBGameCover;
-use App\Models\IGDBGameStage;
 use App\Models\IGDBCompany;
 use App\Models\IGDBInvolvedCompany;
 
@@ -39,7 +38,13 @@ class GameController extends Controller
 
     public function getCount()
     {
-        return IGDBGameStage::count();
+        return IGDBGame::count();
+    }
+
+    public function getBestRated()
+    {
+        return IGDBGame::where('total_rating_count', '>', '5')
+            ->where('total_rating', '>', '90')->get()->sortByDesc('total_rating_count')->take(5);
     }
 
     public function store(Request $request)

@@ -14,37 +14,41 @@
     <v-row>
       <v-col cols="12" md="12">
         <div class="div-card-title">
-          <p>game count </p>
+          <p>most hyped games from all time </p>
         </div>
         <v-divider></v-divider>
       </v-col>
     </v-row>
     <v-slide-y-transition>
       <div v-show="loaded" v-if="loaded">
-        <v-row>
-          <v-col cols="12" md="3">
-            <div>
-              <v-icon size="70">mdi-gamepad-variant</v-icon>  
-            </div>
-          </v-col>
-          <v-col cols="12" md="8">
-            <div class="div-count">
-              <span class="text-h4">{{ gameCount }}</span>
-              <p class="p-subtitle">games on our database! (i)</p>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="12">
-            <v-card-text class="v-card-text">
-              "Some trees flourish, others die. Some cattle grow strong, others are taken by wolves. Some men are born rich enough and dumb enough to enjoy their lives. Ain't nothing fair."
-            </v-card-text>
-          </v-col>
-        </v-row>
+        <v-table density="compact">
+          <thead>
+            <tr>
+              <th>
+                Game
+              </th>
+              <th>
+                Calories
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="game in games"
+              :key="game.id"
+            >
+              <td>{{ game.name }}</td>
+              <td>{{ game.total_rating_count }}</td>
+              <td>{{ game.total_rating }}</td>
+            </tr>
+          </tbody>
+        </v-table>
+        
+
         <v-divider></v-divider>
-          <div class="div-updated-at">
-            <p>updated at</p>
-          </div>
+        <div class="div-updated-at">
+          <p>based on the number of ratings and the rating itself</p>
+        </div>
       </div>
     </v-slide-y-transition>
       
@@ -53,20 +57,20 @@
 
 <script>
 
-import { getGameCount } from '@/services/game.service';
+import { getMostHypedGamesFromAllTime } from '@/services/game.service';
 
 export default {
-  name: "GameCount",
+  name: "MostHypedFromAllTime",
   data() {
     return {
-      gameCount: '[loading ... ]',
+      games: [],
       loading: true,
       loaded: false,
     }
   },
   created() {
-    getGameCount().then((response) => {
-      this.gameCount = response.data;
+    getMostHypedGamesFromAllTime().then((response) => {
+      this.games = response.data;
       this.loading = false;
       this.loaded = true;
     });

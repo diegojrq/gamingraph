@@ -23,7 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('game')->group(function () {
-    Route::get('/count', [GameController::class, 'getCount']);    
+    Route::get('/count', [GameController::class, 'getCount']);
+    Route::get('/most-hyped-from-all-time', [GameController::class, 'getBestRated']);
     Route::get('/{game}', [GameController::class, 'show']);
 });
 

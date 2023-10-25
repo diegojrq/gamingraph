@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\IGDBGameStage;
 use App\Models\JobTracker;
 
 use App\Jobs\IGDBCreateOrUdpateGameJob;
@@ -42,9 +41,6 @@ class IGDBFetchAllGamesJob implements ShouldQueue
             // log the job
             $job = JobTracker::init('IGDBFetchAllGamesJob');
             
-            // this must be fixed
-            IGDBGameStage::truncate();
-
             $clientID       = 'hrnc6jbxh7wit61oupsz4sj1jrw2f1';
             $clientSecret   = 'v1zbtu3eaj31xush9vpu63ha7wuvmg';
             
