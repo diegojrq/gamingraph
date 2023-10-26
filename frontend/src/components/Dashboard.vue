@@ -16,6 +16,7 @@
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
+          <GenreGraph />
         </v-col>
         <v-col cols="12" md="4">
         </v-col>
@@ -32,10 +33,11 @@
 import GameCount from '@/components/dashboard/GameCount.vue'
 import MostHypedFromAllTime from '@/components/dashboard/MostHypedFromAllTime.vue'
 import FeaturedGame from '@/components/dashboard/FeaturedGame.vue'
+import GenreGraph from '@/components/dashboard/GenreGraph.vue'
 
 export default {
   name: "Dashboard",
-  components: { GameCount, MostHypedFromAllTime, FeaturedGame },
+  components: { GameCount, MostHypedFromAllTime, FeaturedGame, GenreGraph },
   mixins: [],
   data() {
     return {

@@ -123,7 +123,6 @@ export default {
   .div-game-rating-number {
     font-size: 1.8em;
     color: #fff;
-
   }
 
   .div-game-launch {    
