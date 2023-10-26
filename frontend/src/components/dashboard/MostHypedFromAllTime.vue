@@ -21,33 +21,41 @@
     </v-row>
     <v-slide-y-transition>
       <div v-show="loaded" v-if="loaded">
-        <v-table density="compact">
-          <thead>
-            <tr>
-              <th>
-                Game
-              </th>
-              <th>
-                Calories
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="game in games"
-              :key="game.id"
-            >
-              <td>{{ game.name }}</td>
-              <td>{{ game.total_rating_count }}</td>
-              <td>{{ game.total_rating }}</td>
-            </tr>
-          </tbody>
-        </v-table>
-        
+        <v-row>
+          <v-col cols="12" md="3">
+            <div>
+              <v-icon size="100">mdi-star</v-icon>  
+            </div>
+          </v-col>
+          <v-col cols="12" md="9">
+            <v-table class="v-table" density="compact">
+              <tbody>
+                <tr
+                  v-for="game in games"
+                  :key="game.id"
+                >
+                  <td>{{ game.name }}</td>
+                  <td>{{ Math.round(game.total_rating * 100) / 100 }} / 100</td>
+                </tr>
+              </tbody>
+            </v-table>
+          </v-col>
+        </v-row>
 
         <v-divider></v-divider>
         <div class="div-updated-at">
-          <p>based on the number of ratings and the rating itself</p>
+          <v-row>
+            <v-col cols="12" md="6">
+              <div class="div-updated-at-based">
+                <p>based on the number of ratings and the rating itself</p>            
+              </div>
+            </v-col>
+            <v-col cols="12" md="6">
+              <div class="div-updated-at-see-more">
+                <p>see more ...</p>
+              </div>
+            </v-col>
+          </v-row>
         </div>
       </div>
     </v-slide-y-transition>
@@ -113,28 +121,6 @@ export default {
     padding: 1%;
     font-size: 10px;
   }
-  
-  .div-game-info {
-    text-align: left;
-    font-size: 1em;
-  }
-
-  .div-game-name {    
-    padding-left: 4%;
-    font-size: 1.8em;
-  }
-
-  .div-game-rating-number {
-    font-size: 1.8em;
-    color: #fff;
-
-  }
-
-  .div-game-launch {    
-    padding-left: 8%;
-    font-size: 1.0em;
-    color: #999;
-  }
 
   .div-card-title {
     text-align: right;
@@ -142,17 +128,35 @@ export default {
     font-size: 10px;
   }
 
-  .div-count {
+  .v-table {
+    font-size: 0.7em;
+    background-color: #333;
+    color: #fff;
+    padding: 0;
+    text-align: right;
+  }
+
+  .v-table tr {    
+    line-height: 0.5em;
+  }
+
+  .v-table td {    
+    color: #fff;
+    padding: 0;
+  }
+
+  .v-table th {
+    background-color: #333;
+    color: #fff;
+    padding: 0;
+  }
+
+  .div-updated-at-based {
     text-align: left;
-    padding-left: 4%;    
   }
 
-  .div-count {
-    font-size: 0.8em;    
-  }
-
-  .p-subtitle {
-    font-size: 1.8em;    
+  .div-updated-at-see-more {
+    text-align: right;
   }
 
 </style>

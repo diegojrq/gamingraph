@@ -24,7 +24,7 @@
         <v-row>
           <v-col cols="12" md="3">
             <div>
-              <v-icon size="70">mdi-gamepad-variant</v-icon>  
+              <v-icon size="80">mdi-gamepad-variant</v-icon>  
             </div>
           </v-col>
           <v-col cols="12" md="8">
