@@ -14,40 +14,26 @@
     <v-row>
       <v-col cols="12" md="12">
         <div class="div-card-title">
-          <p>most hyped games from all time </p>
+          <p>genre division </p>
         </div>
         <v-divider></v-divider>
       </v-col>
     </v-row>
     <v-slide-y-transition>
       <div v-show="loaded" v-if="loaded">
-        <v-row>
-          <v-col cols="12" md="3">
-            <div>
-              <v-icon size="100">mdi-star</v-icon>  
-            </div>
-          </v-col>
-          <v-col cols="12" md="9">
-            <v-table class="v-table" density="compact">
-              <tbody>
-                <tr
-                  v-for="game in games"
-                  :key="game.id"
-                >
-                  <td>{{ game.name }}</td>
-                  <td>{{ Math.round(game.total_rating * 100) / 100 }} / 100</td>
-                </tr>
-              </tbody>
-            </v-table>
-          </v-col>
-        </v-row>
-
+        <div class="chart-div">
+          <Pie
+              id="my-chart-id"
+              :options="chartOptions"
+              :data="chartData"
+            />
+        </div>
         <v-divider></v-divider>
         <div class="div-updated-at">
           <v-row>
             <v-col cols="12" md="6">
               <div class="div-updated-at-based">
-                <p>based on the number of ratings and the rating itself</p>            
+                <p>embrace this indie adventure</p>            
               </div>
             </v-col>
             <v-col cols="12" md="6">
@@ -65,20 +51,40 @@
 
 <script>
 
-import { getMostHypedGamesFromAllTime } from '@/services/game.service';
+import { getGenreCount } from '@/services/game.service';
+
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, Colors } from 'chart.js'
+import { Pie } from 'vue-chartjs'
+
+ChartJS.register(ArcElement, Tooltip, Legend, Colors)
 
 export default {
   name: "GenreGraph",
+  components: { Pie },
+
   data() {
     return {
-      games: [],
+      chartData: {
+        labels: [],
+        datasets: [
+          { data: [] }
+        ]
+      },
+      chartOptions: {
+        responsive: true,
+      },
       loading: true,
       loaded: false,
     }
   },
   created() {
-    getMostHypedGamesFromAllTime().then((response) => {
-      this.games = response.data;
+    getGenreCount().then((response) => {
+
+      response.data.forEach((element) => {
+        this.chartData.labels.push(element.name);
+        this.chartData.datasets[0].data.push(element.count);
+      });
+      
       this.loading = false;
       this.loaded = true;
     });
@@ -90,32 +96,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .v-card {    
-    margin-top: 20px;
-    background-color: #333;
-    color: #fff;
-    border: 2px solid #fff;    
-  }
-
-  .img-cover {
-    width: 92%;
-    margin: 4%;
-    
-    border: 1px solid #fff;
-    border-radius: 1%;
-  }
-
-  .div-title {
-    width: 80%;
-    margin: 1%;    
-    text-align: right;
-    border: 1px solid #fff;
-  }
-
-  .v-card-text {    
-    font-size: 12px;
-  }
-
+  
   .div-updated-at {
     text-align: left;
     padding: 1%;
@@ -128,35 +109,16 @@ export default {
     font-size: 10px;
   }
 
-  .v-table {
-    font-size: 0.7em;
-    background-color: #333;
-    color: #fff;
-    padding: 0;
-    text-align: right;
-  }
-
-  .v-table tr {    
-    line-height: 0.5em;
-  }
-
-  .v-table td {    
-    color: #fff;
-    padding: 0;
-  }
-
-  .v-table th {
-    background-color: #333;
-    color: #fff;
-    padding: 0;
-  }
-
   .div-updated-at-based {
     text-align: left;
   }
 
   .div-updated-at-see-more {
     text-align: right;
+  }
+
+  .chart-div {
+    padding: 4%;
   }
 
 </style>

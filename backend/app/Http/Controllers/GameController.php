@@ -13,6 +13,7 @@ use App\Models\IGDBInvolvedCompany;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 class GameController extends Controller
 {
@@ -45,6 +46,16 @@ class GameController extends Controller
     {
         return IGDBGame::where('total_rating_count', '>', '5')
             ->where('total_rating', '>', '90')->get()->sortByDesc('total_rating_count')->take(5);
+    }
+
+    public function getGenreCount()
+    {
+        return DB::table('igdb_genres')
+            ->join('igdb_games_genres', 'igdb_genres.id', '=', 'igdb_games_genres.genre')
+            ->select('igdb_genres.id', 'igdb_genres.name', DB::raw("count(igdb_genres.id) as count"))
+            ->groupBy('igdb_genres.id', 'igdb_genres.name')
+            ->orderBy('count', 'desc') 
+        ->get();
     }
 
     public function store(Request $request)
