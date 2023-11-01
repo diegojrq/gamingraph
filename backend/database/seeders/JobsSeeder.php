@@ -76,6 +76,14 @@ class JobsSeeder extends Seeder
                     'created_at'    => now(),
                     'updated_at'    => now()
                 ],
+                [
+                    'name'	        => 'IGDBFetchNewGamesJob',
+                    'description'   => 'Job that fetchs all games from IGDB that are not in the database yet',
+                    'class'         => 'App\Jobs\IGDBFetchNewGamesJob',
+                    'source'        => 'IGDB',
+                    'created_at'    => now(),
+                    'updated_at'    => now()
+                ],                
                 
             ]);
         }
