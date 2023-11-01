@@ -19,6 +19,7 @@
           <GenreGraph />
         </v-col>
         <v-col cols="12" md="6">
+          <ThemeGraph />
         </v-col>
       </v-row>
     </v-responsive>
@@ -31,10 +32,11 @@ import GameCount from '@/components/dashboard/GameCount.vue'
 import MostHypedFromAllTime from '@/components/dashboard/MostHypedFromAllTime.vue'
 import FeaturedGame from '@/components/dashboard/FeaturedGame.vue'
 import GenreGraph from '@/components/dashboard/GenreGraph.vue'
+import ThemeGraph from '@/components/dashboard/ThemeGraph.vue'
 
 export default {
   name: "Dashboard",
-  components: { GameCount, MostHypedFromAllTime, FeaturedGame, GenreGraph },
+  components: { GameCount, MostHypedFromAllTime, FeaturedGame, GenreGraph, ThemeGraph },
   mixins: [],
   data() {
     return {

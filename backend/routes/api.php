@@ -26,6 +26,7 @@ Route::prefix('game')->group(function () {
     Route::get('/count', [GameController::class, 'getCount']);
     Route::get('/most-hyped-from-all-time', [GameController::class, 'getBestRated']);
     Route::get('/genre-count', [GameController::class, 'getGenreCount']);
+    Route::get('/theme-count', [GameController::class, 'getThemeCount']);
     Route::get('/{game}', [GameController::class, 'show']);
 });
 

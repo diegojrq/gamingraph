@@ -14,7 +14,7 @@
     <v-row>
       <v-col cols="12" md="12">
         <div class="div-card-title">
-          <p>most hyped games from all time </p>
+          <p><strong>most hyped</strong> games from all time </p>
         </div>
         <v-divider></v-divider>
       </v-col>
@@ -125,7 +125,7 @@ export default {
   .div-card-title {
     text-align: right;
     padding: 1%;
-    font-size: 10px;
+    font-size: 0.8em;
   }
 
   .v-table {

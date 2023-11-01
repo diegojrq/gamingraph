@@ -14,7 +14,7 @@
     <v-row>
       <v-col cols="12" md="12">
         <div class="div-card-title">
-          <p><strong>genre</strong> division </p>
+          <p><strong>theme</strong> division </p>
         </div>
         <v-divider></v-divider>
       </v-col>
@@ -33,7 +33,7 @@
           <v-row>
             <v-col cols="12" md="6">
               <div class="div-updated-at-based">
-                <p>embrace this indie adventure</p>            
+                <p>so much action</p>            
               </div>
             </v-col>
             <v-col cols="12" md="6">
@@ -51,7 +51,7 @@
 
 <script>
 
-import { getGenreCount } from '@/services/game.service';
+import { getThemeCount } from '@/services/game.service';
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Colors } from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
@@ -59,7 +59,7 @@ import { Doughnut } from 'vue-chartjs'
 ChartJS.register(ArcElement, Tooltip, Legend, Colors)
 
 export default {
-  name: "GenreGraph",
+  name: "ThemeGraph",
   components: { Doughnut },
 
   data() {
@@ -71,15 +71,14 @@ export default {
         ]
       },
       chartOptions: {
-        responsive: true,        
+        responsive: true,
       },
       loading: true,
       loaded: false,
     }
   },
   created() {
-    getGenreCount().then((response) => {
-
+    getThemeCount().then((response) => {
       response.data.forEach((element) => {
         this.chartData.labels.push(element.name);
         this.chartData.datasets[0].data.push(element.count);

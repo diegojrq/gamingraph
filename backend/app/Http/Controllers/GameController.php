@@ -58,6 +58,16 @@ class GameController extends Controller
         ->get();
     }
 
+    public function getThemeCount()
+    {
+        return DB::table('igdb_themes')
+            ->join('igdb_games_themes', 'igdb_themes.id', '=', 'igdb_games_themes.theme')
+            ->select('igdb_themes.id', 'igdb_themes.name', DB::raw("count(igdb_themes.id) as count"))
+            ->groupBy('igdb_themes.id', 'igdb_themes.name')
+            ->orderBy('count', 'desc') 
+        ->get();
+    }
+
     public function store(Request $request)
     {
         return SteamApp::create($request->all());

@@ -14,7 +14,7 @@
     <v-row>
       <v-col cols="12" md="12">
         <div class="div-featured-game">
-          <p>featured game ot the day</p>
+          <p><strong>featured</strong> game ot the day</p>
         </div>
         <v-divider></v-divider>
       </v-col>
@@ -103,7 +103,6 @@ export default {
   created() {
     getGame(19164).then((response) => {
       this.game = response.data;
-      console.log(this.game.cover);
       this.loaded = true;
       this.loading = false;
       
@@ -174,7 +173,6 @@ export default {
   .div-game-rating-number {
     font-size: 1.8em;
     color: #fff;
-
   }
 
   .div-game-launch {    
@@ -186,7 +184,7 @@ export default {
   .div-featured-game {
     text-align: right;
     padding: 1%;
-    font-size: 10px;
+    font-size: 0.8em;
   }
 
 </style>

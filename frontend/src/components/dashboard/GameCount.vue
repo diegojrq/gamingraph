@@ -14,7 +14,7 @@
     <v-row>
       <v-col cols="12" md="12">
         <div class="div-card-title">
-          <p>game count </p>
+          <p>game <strong>count</strong></p>
         </div>
         <v-divider></v-divider>
       </v-col>
@@ -134,7 +134,7 @@ export default {
   .div-card-title {
     text-align: right;
     padding: 1%;
-    font-size: 10px;
+    font-size: 0.8em;
   }
 
   .div-count {
@@ -147,7 +147,7 @@ export default {
   }
 
   .p-subtitle {
-    font-size: 1.8em;    
+    font-size: 1.8em;
   }
 
 </style>
