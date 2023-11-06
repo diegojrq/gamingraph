@@ -43,7 +43,7 @@
         </v-row>
         <v-divider></v-divider>
           <div class="div-updated-at">
-            <p>how many games have u played?</p>
+            <p>how many have u played?</p>
           </div>
       </div>
     </v-slide-y-transition>

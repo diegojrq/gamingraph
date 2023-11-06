@@ -82,6 +82,7 @@
 
 <script>
 
+import { getRandom } from '@/services/featured_game.service';
 import { getGame } from '@/services/game.service';
 
 import moment from 'moment';
@@ -101,18 +102,20 @@ export default {
     clearInterval(this.interval)
   },
   created() {
-    getGame(19164).then((response) => {
-      this.game = response.data;
-      this.loaded = true;
-      this.loading = false;
-      
-      this.rating_interval = setInterval(() => {
-        if (this.rating_value >= this.game.rating) {
-          return 1;
-        }
-        this.rating_value += 1
-      }, 10);      
+    getRandom().then((randomResponse) => {
+      getGame(randomResponse.data.game).then((gameResponse) => {
+        this.game = gameResponse.data;
+        this.loaded = true;
+        this.loading = false;
+        
+        this.rating_interval = setInterval(() => {
+          if (this.rating_value >= this.game.rating) {
+            return 1;
+          }
+          this.rating_value += 1
+        }, 10);      
 
+      });      
     });
   },
   methods: {

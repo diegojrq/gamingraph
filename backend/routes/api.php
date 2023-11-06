@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\FeaturedGameController;
 use App\Http\Controllers\JobController;
 
 
@@ -28,6 +29,10 @@ Route::prefix('game')->group(function () {
     Route::get('/genre-count', [GameController::class, 'getGenreCount']);
     Route::get('/theme-count', [GameController::class, 'getThemeCount']);
     Route::get('/{game}', [GameController::class, 'show']);
+});
+
+Route::prefix('featured-game')->group(function () {
+    Route::get('/random', [FeaturedGameController::class, 'getRandom']);
 });
 
 Route::prefix('job')->group(function () {

@@ -5,11 +5,13 @@ const getMostHypedGamesFromAllTime = () => api.get(`game/most-hyped-from-all-tim
 const getGenreCount = () => api.get(`game/genre-count`);
 const getThemeCount = () => api.get(`game/theme-count`);
 const getGameCount = () => api.get(`game/count`);
+const getRandomFeaturedGame = () => api.get(`game/random-featured-game`);
 
 export {    
     getGame,
     getGameCount,
     getMostHypedGamesFromAllTime,
     getGenreCount,
-    getThemeCount
+    getThemeCount,
+    getRandomFeaturedGame
 }

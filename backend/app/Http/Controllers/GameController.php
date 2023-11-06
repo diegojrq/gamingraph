@@ -42,6 +42,12 @@ class GameController extends Controller
         return IGDBGame::count();
     }
 
+    public function getRandomFeaturedGame()
+    {
+        return IGDBGame::where('total_rating_count', '>', '5')
+            ->where('total_rating', '>', '90')->get()->take(20)->random(1)[0];
+    }
+
     public function getBestRated()
     {
         return IGDBGame::where('total_rating_count', '>', '5')
