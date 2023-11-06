@@ -52,7 +52,7 @@
             </v-col>
             <v-col cols="12" md="6">
               <div class="div-updated-at-see-more">
-                <p>see more ...</p>
+                <p></p>
               </div>
             </v-col>
           </v-row>

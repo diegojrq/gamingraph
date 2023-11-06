@@ -72,7 +72,7 @@
         </v-card-text>
         <v-divider></v-divider>
           <div class="div-updated-at">
-            <p>updated at</p>
+            <p>updated at {{ formatDate(game.updated_locally_at) }}</p>
           </div>
       </div>
     </v-slide-y-transition>
