@@ -138,10 +138,13 @@ export default {
     border: 2px solid #fff;    
   }
 
+  .div-wrapper-title {
+    padding: 6%;
+  }
+
   .img-cover {
     width: 92%;
     margin: 4%;
-    
     border: 1px solid #fff;
     border-radius: 1%;
   }
@@ -153,7 +156,8 @@ export default {
     border: 1px solid #fff;
   }
 
-  .v-card-text {    
+  .v-card-text {
+    text-align: justify;
     font-size: 12px;
   }
 
