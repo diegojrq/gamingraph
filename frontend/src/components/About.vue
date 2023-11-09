@@ -102,7 +102,8 @@ Vue for the frontend
                 <p>In the last 9 year I have been a developer, project manager, tech leader, database administrator and played the role of Product Owner on many projects such e-commerce, portals, intranet, customer relationship management apps and more.</p>
                 <br/>
                 <p>Currently <span class="span-highlight">playing</span> everything that is downloadable =)</p>
-
+                <br/>
+                <p>Get in touch using my <span class="span-highlight">social media below</span>!</p>
               </div>
             </v-col>
           </v-row>          
